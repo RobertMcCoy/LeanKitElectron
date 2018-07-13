@@ -1,0 +1,2 @@
+# LeanKitElectron
+LeanKit meets Desktop
