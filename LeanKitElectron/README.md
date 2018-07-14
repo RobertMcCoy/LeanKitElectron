@@ -1,28 +1,36 @@
-# leankit-electron
+# Leankit for Desktop
+
+View your LeanKit boards on your desktop.
 
 > An electron-vue project
 
 #### Build Setup
 
-``` bash
+This project uses `yarn` over `npm`, if you do not have `yarn` installed, run `npm install -g yarn`.
+
+```
 # install dependencies
-npm install
+yarn install
+
+# rebuild dependencies (if keytar throws errors with yarn dev)
+.\node_modules\.bin\electron-rebuild
 
 # serve with hot reload at localhost:9080
-npm run dev
+yarn dev
 
 # build electron application for production
-npm run build
+yarn build
 
 # run unit tests
-npm test
-
+yarn test
 
 # lint all JS/Vue component files in `src/`
-npm run lint
+yarn lint
 
 ```
 
 ---
 
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[4c6ee7b](https://github.com/SimulatedGREG/electron-vue/tree/4c6ee7bf4f9b4aa647a22ec1c1ca29c2e59c3645) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli). 
+
+Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
