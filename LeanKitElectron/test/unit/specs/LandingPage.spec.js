@@ -10,10 +10,7 @@ let vm;
 
 describe("The Landing Page", () => {
   beforeEach(() => {
-    vm = new Vue({
-      el: document.createElement("div"),
-      render: h => h(LandingPage)
-    }).$mount();
+    vm = new Vue(LandingPage).$mount();
   });
 
   it("should render correct contents", () => {
