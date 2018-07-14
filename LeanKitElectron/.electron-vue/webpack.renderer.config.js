@@ -49,6 +49,13 @@ let rendererConfig = {
         })
       },
       {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'scss-loader'
+        })
+      },
+      {
         test: /\.html$/,
         use: 'vue-html-loader'
       },
