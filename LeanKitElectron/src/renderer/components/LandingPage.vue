@@ -62,7 +62,7 @@ export default {
         });
     }
   },
-  beforeMount: async function () {
+  beforeMount: async () => {
     if (storage.has("accountName", (error, hasKey) => {
       if (error) throw error;
 
