@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+<div id="wrapper">
     <main>
       <div class="left-side">
         <span class="title">
@@ -11,9 +11,11 @@
         <div class="doc">
           <div class="title">Login to Get Started</div>
           <div class="login">
-            <input type="text" placeholder="AccountName" name="AccountName" id="AccountName" v-model="accountName" />
+            <input type="text" placeholder="Account Name" name="AccountName" id="AccountName" v-model="accountName" v-tooltip="'This is the portion of the URL where the \'www\' would normally reside: https://{accountname}.leankit.com/.'" />
             <input type="text" placeholder="Username" name="Username" id="Username" v-model="username" />
             <input type="password" placeholder="Password" name="Password" id="Password" v-model="password" />
+            <input type="checkbox" name="Remember" id="Remember" v-model="remember" />
+            <label for="Remember">Remember Me</label>
             <input type="button" name="Login" id="Login" value="Login" @click="login()" />
           </div>
         </div>
@@ -24,86 +26,66 @@
 
 
 <script>
-  import axios from 'axios'
+import axios from "axios";
+import keytar from "keytar";
+import storage from "electron-json-storage";
+import _ from "lodash";
 
-  export default {
-    name: 'landing-page',
-    data: function () {
-      return {
-        accountName: '',
-        username: '',
-        password: ''
-      }
-    },
-    methods: {
-      login () {
-        axios
-          .get('https://' + this.accountName + '.leankit.com/io/board', { auth: { username: this.username, password: this.password } })
-          .then((result) => { console.log(result) })
-      }
+export default {
+  name: "landing-page",
+  data: function () {
+    return {
+      accountName: "",
+      username: "",
+      password: "",
+      remember: false
+    };
+  },
+  methods: {
+    login () {
+      axios
+        .get("https://" + this.accountName + ".leankit.com/io/board", {
+          auth: { username: this.username, password: this.password }
+        })
+        .then(result => {
+          storage.set("accountName", { accountName: this.accountName },
+            error => {
+              if (error) throw error;
+            }
+          );
+          if (this.remember) {
+            keytar.setPassword("leankitDesktop", this.username, this.password);
+          } else {
+            keytar.deletePassword("leankitDesktop", this.username);
+          }
+          console.log(result);
+        });
     }
+  },
+  beforeMount: async function () {
+    if (storage.has("accountName", (error, hasKey) => {
+      if (error) throw error;
+
+      if (hasKey) {
+        storage.get("accountName", (error, data) => {
+          if (error) throw error;
+          this.accountName = data.accountName;
+        });
+      }
+    })
+    );
+
+    await keytar.findCredentials("leankitDesktop").then((account) => {
+      if (account) {
+        this.username = _.last(account).account;
+        this.password = _.last(account).password;
+        this.remember = true;
+      }
+    });
   }
+};
 </script>
 
-<style>
-@import url("https://fonts.googleapis.com/css?family=Montserrat");
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: "Montserrat", sans-serif;
-  color: white;
-}
-
-#wrapper {
-  background: radial-gradient(
-    ellipse at top left,
-    rgba(17, 153, 142, 1) 40%,
-    rgba(56, 239, 125, 0.9) 100%
-  );
-  height: 100vh;
-  padding: 60px 80px;
-  width: 100vw;
-}
-
-#logo {
-  height: auto;
-  margin-bottom: 20px;
-  width: 420px;
-}
-
-main {
-  display: flex;
-  justify-content: space-between;
-}
-
-main > div {
-  flex-basis: 50%;
-}
-
-.left-side {
-  display: flex;
-  flex-direction: column;
-}
-
-.welcome {
-  color: #555;
-  font-size: 23px;
-  margin-bottom: 10px;
-}
-
-.login input {
-  margin: 10px 0;
-  padding: 5px 10px;
-  display: block;
-}
-
-.login #Login {
-  color: black;
-}
-
+<style lang="scss">
+@import "../style/main";
 </style>
