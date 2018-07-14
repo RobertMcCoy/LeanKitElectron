@@ -6,8 +6,8 @@
 
 <script>
   export default {
-    name: 'leankit-electron'
-  }
+    name: "leankit-electron"
+  };
 </script>
 
 <style>
