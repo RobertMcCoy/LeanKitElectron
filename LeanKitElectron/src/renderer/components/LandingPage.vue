@@ -33,7 +33,7 @@ import _ from "lodash";
 
 export default {
   name: "landing-page",
-  data: function () {
+  data: () => {
     return {
       accountName: "",
       username: "",
@@ -58,11 +58,11 @@ export default {
           } else {
             keytar.deletePassword("leankitDesktop", this.username);
           }
-          console.log(result);
+          this.$router.push({ name: "boards", params: { boards: result.data.boards } });
         });
     }
   },
-  beforeMount: async () => {
+  mounted: async () => {
     if (storage.has("accountName", (error, hasKey) => {
       if (error) throw error;
 
@@ -72,8 +72,7 @@ export default {
           this.accountName = data.accountName;
         });
       }
-    })
-    );
+    }));
 
     await keytar.findCredentials("leankitDesktop").then((account) => {
       if (account) {
