@@ -33,7 +33,7 @@ import _ from "lodash";
 
 export default {
   name: "landing-page",
-  data: () => {
+  data: function () {
     return {
       accountName: "",
       username: "",
@@ -62,7 +62,7 @@ export default {
         });
     }
   },
-  mounted: async () => {
+  beforeMount: async function () {
     if (storage.has("accountName", (error, hasKey) => {
       if (error) throw error;
 
@@ -74,7 +74,7 @@ export default {
       }
     }));
 
-    await keytar.findCredentials("leankitDesktop").then((account) => {
+    keytar.findCredentials("leankitDesktop").then((account) => {
       if (account) {
         this.username = _.last(account).account;
         this.password = _.last(account).password;
